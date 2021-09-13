@@ -1,4 +1,4 @@
-module github.com/transybao1393/file-validation-package
+module github.com/transybao1393/go-bigcache
 
 go 1.15
 
