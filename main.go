@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"reflect"
 
-	s "github.com/transybao1393/file-validation-package/services"
+	s "github.com/transybao1393/go-bigcache/services"
 )
 
 type FileStruct struct {
@@ -95,15 +95,6 @@ func main() {
 	}
 	fmt.Println("config", reflect.TypeOf(config))
 	fmt.Println("type of verbose", reflect.TypeOf(config.Verbose))
-
-	//- net/http
-	// mux := http.NewServeMux()
-	// mux.HandleFunc("/", rootHandler)
-	// mux.HandleFunc("/bc", bigCacheHandler)
-
-	// fmt.Println("Server is running on port 8090")
-	// err := http.ListenAndServe(":8090", mux)
-	// log.Fatal(err)
 
 	//- fasthttp
 	s.FHExecute()

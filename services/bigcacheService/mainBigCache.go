@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	singleton "github.com/transybao1393/file-validation-package/singleton"
+	singleton "github.com/transybao1393/go-bigcache/singleton"
 )
 
 var (
@@ -27,7 +27,6 @@ type BigCacheStruct struct {
 func GetCacheData(key string) string {
 	//- init
 	cache := singleton.GetBigCacheInstance()
-	defer cache.Close()
 
 	entry, err := cache.Get(key)
 	if err != nil {

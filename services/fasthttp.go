@@ -1,69 +1,27 @@
 package services
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
-	"strconv"
 
+	"github.com/transybao1393/go-bigcache/repository"
 	"github.com/valyala/fasthttp"
+)
+
+var (
+	bcr = repository.InitCRUDRepo()
 )
 
 type MyHandler struct {
 	foobar string
 }
 
-type BCBodyStruct struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
-
-func jsonResponseHandler(ctx *fasthttp.RequestCtx, statusCode int, data string) ([]byte, error) {
-	//- set response headers
-	ctx.Response.Header.Set("Content-Type", "application/json")
-	ctx.Response.SetStatusCode(statusCode)
-
-	return json.MarshalIndent(map[string]string{
-		"statusCode": strconv.Itoa(statusCode),
-		"message":    fasthttp.StatusMessage(statusCode),
-		"data":       data,
-	}, "", "  ")
-}
-
 func rootHandler(ctx *fasthttp.RequestCtx) {
 
 	switch string(ctx.Method()) {
 	case "GET":
-		byteParam := ctx.QueryArgs().Peek("key")
-		fmt.Println("byte params", string(byteParam))
-		data := GetCacheData(string(byteParam))
-		resp, err := jsonResponseHandler(ctx, 200, data)
-		if err != nil {
-			log.Fatal(err)
-			// panic(err)
-		}
-		ctx.Write(resp)
+		bcr.GET(ctx)
 	case "POST":
-		//- add value to cache
-
-		//- get body data
-		bodyBytes := ctx.Request.Body()
-		fmt.Println(string(bodyBytes))
-
-		//- json transform
-		bcData := BCBodyStruct{}
-		json.Unmarshal(bodyBytes, &bcData)
-		fmt.Printf("%s", bcData)
-
-		SetCacheData(bcData.Name, bcData.Value)
-
-		//- success response
-		resp, err := jsonResponseHandler(ctx, 200, "POST success")
-		if err != nil {
-			log.Fatal(err)
-			// panic(err)
-		}
-		ctx.Write(resp)
+		bcr.POST(ctx)
 	}
 }
 
